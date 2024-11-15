@@ -1,0 +1,16 @@
+﻿@page
+@model RegisterModel
+
+<h2>Cadastro</h2>
+<form method="post">
+    <label>Usuário:</label>
+    <input type="text" name="username" required />
+    <label>Senha:</label>
+    <input type="password" name="password" required />
+    <button type="submit">Cadastrar</button>
+</form>
+
+@if (Model.Message != null)
+{
+    <p>@Model.Message</p>
+}
