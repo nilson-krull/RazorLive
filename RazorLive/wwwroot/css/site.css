@@ -1,3 +1,4 @@
+
 /* Estilos globais */
 * {
     box-sizing: border-box;
@@ -34,7 +35,7 @@ main {
 /* Containers específicos para login e formulário */
 .container, .login-container {
     width: 100%;
-    max-width: 500px;
+    max-width: 450px;
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
@@ -154,4 +155,43 @@ button {
     height: 300px;
     overflow-y: scroll;
     padding: 10px;
+}
+
+/* Responsividade para dispositivos móveis */
+@media (max-width: 768px) {
+    .container-main, .camera-container {
+        padding: 10px;
+    }
+
+    .camera-container {
+        flex-direction: column; /* Empilha os elementos verticalmente */
+    }
+
+    .video-container, .admin-video-container, .chat-container {
+        max-width: 100%; /* Usa toda a largura disponível */
+        padding: 10px 0; /* Espaçamento entre os elementos */
+    }
+
+    #messagesList {
+        height: 200px; /* Reduz a altura da lista de mensagens */
+    }
+
+    h1, h2 {
+        font-size: 1.5rem; /* Ajusta o tamanho dos títulos */
+    }
+
+    button {
+        font-size: 14px; /* Reduz o tamanho dos botões */
+    }
+}
+
+/* Responsividade para tablets */
+@media (max-width: 1024px) {
+    .camera-container {
+        flex-direction: column; /* Empilha os elementos */
+    }
+
+    .video-container, .admin-video-container, .chat-container {
+        max-width: 100%; /* Usa toda a largura disponível */
+    }
 }
