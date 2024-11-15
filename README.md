@@ -1,11 +1,13 @@
 # 📸 RazorLive - Aplicação de Chat e Vídeo em Tempo Real
 
 > 🚧 **Status do Projeto: Em Desenvolvimento** 🚧  
-> Esta aplicação ainda está em fase de desenvolvimento. Algumas funcionalidades podem não estar totalmente implementadas e ajustes estão sendo feitos constantemente.
+> Esta aplicação ainda está em fase de desenvolvimento. 
+Algumas funcionalidades podem não estar totalmente implementadas e ajustes estão sendo feitos constantemente.
 
-Bem-vindo ao **RazorLive**! Um aplicativo moderno desenvolvido em **ASP.NET Core 8** com **Razor Pages**, que permite chat online em tempo real e compartilhamento de vídeo via câmera. Aproveite a comunicação instantânea com a integração do **SignalR** para chat em tempo real e uma experiência de vídeo direta e simples.
+Bem-vindo ao **RazorLive**! Um aplicativo moderno desenvolvido em **ASP.NET Core 8** com **Razor Pages**, 
+que permite chat online em tempo real e compartilhamento de vídeo via câmera. 
+Aproveite a comunicação instantânea com a integração do **SignalR** para chat em tempo real e uma experiência de vídeo direta e simples.
 
-![Screenshot do Aplicativo](link-para-screenshot.png)
 
 ---
 
