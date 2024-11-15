@@ -41,7 +41,6 @@ _ReSharper*/
 
 # Publicação e dependências de publicação
 publish/
-wwwroot/
 node_modules/
 dist/
 yarn.lock

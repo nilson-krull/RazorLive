@@ -1,0 +1,135 @@
+﻿@page
+@model CameraModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Chat com WebRTC";
+}
+
+<h1 class="text-center">Chat com WebRTC</h1>
+<div class="container-main">
+    <div class="camera-container d-flex justify-content-between">
+        <!-- Se for admin, exibe sua própria câmera -->
+        <div class="video-container" id="adminCameraContainer" style="display: none;">
+            <video id="videoElement" autoplay playsinline style="width: 100%; max-width: 100%; border: 1px solid black;"></video>
+        </div>
+
+        <!-- Área para exibir a câmera do admin para os outros usuários -->
+        <div class="admin-video-container">
+            <img id="adminVideo" style="width: 100%; max-width: 100%; border: 1px solid black; display: none;" />
+        </div>
+
+        <div class="chat-container">
+            <div id="messagesList" style="height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;"></div>
+            <input type="text" id="messageInput" placeholder="Digite uma mensagem" class="form-control mt-2" />
+            <button onclick="sendMessage()" class="btn btn-primary mt-2 w-100">Enviar</button>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.18/signalr.min.js"></script>
+    <script>
+        console.log("Script iniciado");
+
+        // Define isAdmin com base na variável ViewData
+        let isAdmin = @(Model.IsAdmin ? "true" : "false");
+        console.log("Valor de isAdmin:", isAdmin);
+
+        const adminVideoElement = document.getElementById("adminVideo");
+        const adminCameraContainer = document.getElementById("adminCameraContainer");
+
+        // Função para iniciar a câmera do administrador e transmitir para os outros usuários
+        async function startAdminCamera() {
+            console.log("startAdminCamera() foi chamada");
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+                console.log("Câmera iniciada com sucesso");
+
+                const videoElement = document.getElementById("videoElement");
+                videoElement.srcObject = stream;
+
+                // Exibe a câmera para o administrador
+                adminCameraContainer.style.display = "block";
+                console.log("Câmera do administrador exibida");
+
+                // Envia a stream do admin para os outros usuários periodicamente
+                setInterval(() => {
+                    console.log("Chamando sendAdminStream para transmitir o vídeo do admin");
+                    sendAdminStream(stream);
+                }, 100); // Envia frames a cada 100ms
+            } catch (error) {
+                console.error("Erro ao acessar a câmera:", error);
+                alert("Não foi possível acessar a câmera. Verifique as permissões.");
+            }
+        }
+
+        async function sendAdminStream(stream) {
+            console.log("sendAdminStream() foi chamada");
+            const videoTrack = stream.getVideoTracks()[0];
+            const imageCapture = new ImageCapture(videoTrack);
+            const bitmap = await imageCapture.grabFrame();
+
+            console.log("Frame capturado da câmera do administrador");
+
+            // Converte a imagem para base64 e envia para os outros usuários
+            const canvas = document.createElement("canvas");
+            canvas.width = bitmap.width;
+            canvas.height = bitmap.height;
+            const context = canvas.getContext("2d");
+            context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+            const base64data = canvas.toDataURL("image/webp");
+            console.log("Frame convertido para base64");
+
+            videoConnection.invoke("SendAdminStream", base64data).catch(err => console.error("Erro ao enviar o frame:", err));
+            console.log("Frame enviado para os outros usuários");
+        }
+
+        // Configura o SignalR para o chat
+        const chatConnection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+
+        chatConnection.on("ReceiveMessage", (user, message) => {
+            console.log("Mensagem recebida no chat:", user, message);
+            const msg = document.createElement("div");
+            msg.textContent = `${user}: ${message}`;
+            document.getElementById("messagesList").appendChild(msg);
+        });
+
+        chatConnection.start()
+            .then(() => console.log("Conexão de chat estabelecida com sucesso"))
+            .catch(err => console.error("Erro ao iniciar conexão de chat:", err));
+
+        // Configura o SignalR para a transmissão de vídeo
+        const videoConnection = new signalR.HubConnectionBuilder().withUrl("/videoHub").build();
+
+        videoConnection.on("ReceiveAdminStream", (streamData) => {
+            console.log("Frame do administrador recebido para exibição");
+            adminVideoElement.src = streamData;
+            adminVideoElement.style.display = "block";  // Exibe a imagem do admin
+        });
+
+        videoConnection.start()
+            .then(() => console.log("Conexão de vídeo estabelecida com sucesso"))
+            .catch(err => console.error("Erro ao iniciar conexão de vídeo:", err));
+
+        // Enviar mensagem no chat
+        function sendMessage() {
+            const message = document.getElementById("messageInput").value;
+            console.log("Enviando mensagem:", message);
+
+            chatConnection.invoke("SendMessage", message)
+                .then(() => console.log("Mensagem enviada com sucesso"))
+                .catch(err => console.error("Erro ao enviar mensagem:", err));
+
+            document.getElementById("messageInput").value = "";
+        }
+
+        // Inicia a câmera do admin se o usuário for administrador
+        if (isAdmin === true) {
+            console.log("Usuário é administrador, iniciando a câmera");
+            startAdminCamera();
+        } else {
+            console.log("Usuário não é administrador, câmera não iniciada");
+        }
+    </script>
+}

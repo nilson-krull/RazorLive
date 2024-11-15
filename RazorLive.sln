@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RazorLive", "RazorStreamTest\RazorLive.csproj", "{51793DE4-1325-43E3-A7AC-EB856AC3DEEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RazorLive", "RazorLive\RazorLive.csproj", "{51793DE4-1325-43E3-A7AC-EB856AC3DEEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
