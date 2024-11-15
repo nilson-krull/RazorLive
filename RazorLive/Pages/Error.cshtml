@@ -1,0 +1,15 @@
+﻿@page
+@using RazorLive.Pages
+@model ErrorModel
+@{
+    ViewData["Title"] = "Erro";
+}
+<div class="container text-center">
+    <h1 class="display-4">Erro Interno</h1>
+    <p class="lead">Um erro inesperado ocorreu.</p>
+    @if (Model.ShowRequestId)
+    {
+        <p class="text-muted">Código de erro: <strong>@Model.RequestId</strong></p>
+    }
+    <a class="btn btn-primary" href="/">Voltar para a página inicial</a>
+</div>
