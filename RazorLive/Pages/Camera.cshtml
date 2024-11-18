@@ -114,8 +114,15 @@
 
         // Enviar mensagem no chat
         function sendMessage() {
-            const message = document.getElementById("messageInput").value;
-            console.log("Enviando mensagem:", message);
+            const message = document.getElementById("messageInput").value.trim(); // Remove espaços em branco no início e fim
+            console.log("Tentando enviar mensagem:", message);
+
+            // Verifica se a mensagem não está vazia
+            if (!message) {
+                console.log("Mensagem vazia, não será enviada");
+                alert("A mensagem não pode ser vazia!");
+                return;
+            }
 
             chatConnection.invoke("SendMessage", message)
                 .then(() => console.log("Mensagem enviada com sucesso"))
