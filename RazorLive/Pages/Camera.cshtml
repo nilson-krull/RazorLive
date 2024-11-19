@@ -15,6 +15,11 @@
 
         <!-- Área para exibir a câmera do admin para os outros usuários -->
         <div class="admin-video-container">
+            <!-- Placeholder -->
+            <div id="adminVideoPlaceholder" style="width: 100%; max-width: 100%; height: 300px; background-color: #ccc; border: 1px solid black; display: flex; align-items: center; justify-content: center;">
+                <span>Aguardando transmissão...</span>
+            </div>
+            <!-- Imagem da transmissão -->
             <img id="adminVideo" style="width: 100%; max-width: 100%; border: 1px solid black; display: none;" />
         </div>
 
@@ -25,7 +30,6 @@
         </div>
     </div>
 </div>
-
 
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.18/signalr.min.js"></script>
@@ -104,8 +108,10 @@
 
         videoConnection.on("ReceiveAdminStream", (streamData) => {
             console.log("Frame do administrador recebido para exibição");
+            // Oculta o placeholder e exibe a imagem da transmissão
+            document.getElementById("adminVideoPlaceholder").style.display = "none";
+            adminVideoElement.style.display = "block";
             adminVideoElement.src = streamData;
-            adminVideoElement.style.display = "block";  // Exibe a imagem do admin
         });
 
         videoConnection.start()
@@ -132,7 +138,7 @@
         }
 
         // Inicia a câmera do admin se o usuário for administrador
-        if (isAdmin === true) {
+        if (isAdmin === "true") {
             console.log("Usuário é administrador, iniciando a câmera");
             startAdminCamera();
         } else {
