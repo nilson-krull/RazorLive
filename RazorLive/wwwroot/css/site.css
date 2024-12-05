@@ -35,7 +35,7 @@ main {
 /* Containers específicos para login e formulário */
 .container, .login-container {
     width: 100%;
-    max-width: 100%;
+    max-width: 90%;
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
